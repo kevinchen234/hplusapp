@@ -20,4 +20,10 @@ public class HomeController {
         return "index";
     }
 
+    @GetMapping("/goToSearch")
+    public String goToSearch() {
+        System.out.println("in search controller");
+        return "search";
+    }
+
 }

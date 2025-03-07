@@ -4,9 +4,16 @@
  */
 package com.test.hplus.controllers;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.test.hplus.beans.Product;
+import com.test.hplus.repository.ProductRepository;
 
 /**
  *
@@ -15,17 +22,28 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class SearchController {
 
-    // @GetMapping("/search")
-    // public String search() {
-    //     System.out.println("In the search controller");
-    //     return "search";
-    // }
+    @Autowired
+    private ProductRepository productRepository;
+
     @GetMapping("/search")
-    public ModelAndView search() {
+    public String search(@RequestParam("search") String search, Model model) {
         System.out.println("In the search controller");
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("search");
-        return modelAndView;
+        System.out.println("Search criteria: " + search);
+
+        List<Product> products = productRepository.searchByName(search);
+        model.addAttribute("products", products);
+        return "search";
     }
 
+    // @GetMapping("/search")
+    // public ModelAndView search(@RequestParam("search") String search, Model model) {
+    //     System.out.println("In the search controller");
+    //     System.out.println("Search criteria: " + search);
+    //     ModelAndView modelAndView = new ModelAndView();
+    //     modelAndView.setViewName("search");
+    //     List<Product> products = new ArrayList<>();
+    //     products = productRepository.searchByName(search);
+    //     model.addAttribute("products", products);
+    //     return modelAndView;
+    // }
 }
