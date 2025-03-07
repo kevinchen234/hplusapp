@@ -4,9 +4,16 @@
  */
 package com.test.hplus.beans;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import java.util.Date;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 /**
  *
  * @author kevinchen
@@ -16,13 +23,23 @@ public class User {
 
     @Id
     private int id;
+
+    @Size(min=6, message="{username.not.empty}")
     private String username;
+
+    @Pattern(regexp="((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})", message="Password should have one uppercase, one lowercase, one digit, one special character and should be 6-20 characters long")
     private String password;
-    private String gender;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    @NotNull(message="Activity cannot be null")
     private String activity;
+
+    @NotEmpty(message="First name cannot be empty")
     private String firstName;
     private String lastName;
-    private String dateOfBirth;
+    private Date dateOfBirth;
 
     public int getId() {
         return id;
@@ -48,11 +65,11 @@ public class User {
         this.password = password;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 
@@ -80,11 +97,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
