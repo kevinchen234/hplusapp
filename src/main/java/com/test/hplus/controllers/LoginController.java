@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.test.hplus.beans.Login;
 import com.test.hplus.beans.User;
+import com.test.hplus.exceptions.ApplicationException;
 import com.test.hplus.repository.UserRepository;
 
 /**
@@ -26,7 +27,9 @@ public class LoginController {
     @PostMapping("/login")
     public String login(@ModelAttribute("login") Login login) {
         User user = userRepository.searchByName(login.getUsername());
+        if (user == null) {
+            throw new ApplicationException("User does not exist");
+        }
         return "search";
     }
-
 }
