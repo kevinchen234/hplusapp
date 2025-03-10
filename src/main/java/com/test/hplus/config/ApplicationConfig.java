@@ -7,6 +7,7 @@ package com.test.hplus.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.lang.NonNull;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import org.springframework.web.servlet.view.XmlViewResolver;
 
 import com.test.hplus.convertors.StringToEnumConverter;
 
@@ -39,6 +41,7 @@ public class ApplicationConfig extends WebMvcConfigurationSupport {
         resolver.setPrefix("/WEB-INF/jsp/");
         resolver.setSuffix(".jsp");
         resolver.setViewClass(JstlView.class);
+        resolver.setOrder(2);
         return resolver;
     }
 
@@ -59,4 +62,19 @@ public class ApplicationConfig extends WebMvcConfigurationSupport {
         taskExecutor.setThreadNamePrefix("hplussapp-thread-");
         return taskExecutor;
     }
+
+    @Bean
+    public XmlViewResolver xmlViewResolver() {
+        XmlViewResolver xmlViewResolver = new XmlViewResolver();
+        xmlViewResolver.setLocation(new ClassPathResource("views.xml"));
+        xmlViewResolver.setOrder(1);
+        return xmlViewResolver;
+    }
+
+    // @Bean
+    // public ResourceBundleViewResolver resourceBundleViewResolver() {
+    //     ResourceBundleViewResolver resourceBundleViewResolver = new ResourceBundleViewResolver();
+    //     resourceBundleViewResolver.setBasename("views");
+    //     return resourceBundleViewResolver;
+    // }
 }
