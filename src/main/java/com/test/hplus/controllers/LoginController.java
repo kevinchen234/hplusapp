@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.test.hplus.beans.Login;
 import com.test.hplus.beans.User;
@@ -19,6 +20,7 @@ import com.test.hplus.repository.UserRepository;
  * @author kevinchen
  */
 @Controller
+@SessionAttributes("login")
 public class LoginController {
 
     @Autowired
@@ -30,6 +32,6 @@ public class LoginController {
         if (user == null) {
             throw new ApplicationException("User does not exist");
         }
-        return "search";
+        return "forward:/userprofile";
     }
 }
