@@ -7,7 +7,11 @@ package com.test.hplus.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.lang.NonNull;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -39,9 +43,20 @@ public class ApplicationConfig extends WebMvcConfigurationSupport {
     }
 
     @Override
-    protected void addFormatters(FormatterRegistry registry) {
+    protected void addFormatters(@NonNull FormatterRegistry registry) {
         registry.addConverter(new StringToEnumConverter());
     }
 
+    @Override
+    protected void configureAsyncSupport(@NonNull AsyncSupportConfigurer configurer) {
+        configurer.setDefaultTimeout(5000);
+        configurer.setTaskExecutor(mvcTaskExecutor());
+    }
 
+    @Bean
+    public AsyncTaskExecutor mvcTaskExecutor() {
+        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setThreadNamePrefix("hplussapp-thread-");
+        return taskExecutor;
+    }
 }
