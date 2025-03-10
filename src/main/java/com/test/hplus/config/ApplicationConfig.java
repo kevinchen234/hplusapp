@@ -13,6 +13,7 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.lang.NonNull;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.XmlViewResolver;
 
 import com.test.hplus.convertors.StringToEnumConverter;
+import com.test.hplus.interceptors.LoggingInterceptor;
 
 /**
  *
@@ -69,6 +71,11 @@ public class ApplicationConfig extends WebMvcConfigurationSupport {
         xmlViewResolver.setLocation(new ClassPathResource("views.xml"));
         xmlViewResolver.setOrder(1);
         return xmlViewResolver;
+    }
+
+    @Override
+    protected void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoggingInterceptor()).addPathPatterns("/*");
     }
 
     // @Bean
