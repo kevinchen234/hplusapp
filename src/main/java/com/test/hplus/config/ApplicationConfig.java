@@ -12,10 +12,13 @@ import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.lang.NonNull;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.web.servlet.ThemeResolver;
 import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.theme.CookieThemeResolver;
+import org.springframework.web.servlet.theme.ThemeChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.XmlViewResolver;
@@ -76,6 +79,7 @@ public class ApplicationConfig extends WebMvcConfigurationSupport {
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoggingInterceptor()).addPathPatterns("/*");
+        registry.addInterceptor(new ThemeChangeInterceptor());
     }
 
     // @Bean
@@ -84,4 +88,12 @@ public class ApplicationConfig extends WebMvcConfigurationSupport {
     //     resourceBundleViewResolver.setBasename("views");
     //     return resourceBundleViewResolver;
     // }
+
+    @Bean
+    public ThemeResolver themeResolver() {
+        CookieThemeResolver cookieThemeResolver = new CookieThemeResolver();
+        cookieThemeResolver.setCookieName("theme");
+        cookieThemeResolver.setDefaultThemeName("client-theme1");
+        return cookieThemeResolver;
+    }
 }
