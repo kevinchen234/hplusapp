@@ -4,6 +4,8 @@
  */
 package com.test.hplus.config;
 
+import java.util.Locale;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -12,11 +14,14 @@ import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.lang.NonNull;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ThemeResolver;
 import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.theme.CookieThemeResolver;
 import org.springframework.web.servlet.theme.ThemeChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -80,6 +85,7 @@ public class ApplicationConfig extends WebMvcConfigurationSupport {
     protected void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoggingInterceptor()).addPathPatterns("/*");
         registry.addInterceptor(new ThemeChangeInterceptor());
+        registry.addInterceptor(new LocaleChangeInterceptor());
     }
 
     // @Bean
@@ -88,12 +94,20 @@ public class ApplicationConfig extends WebMvcConfigurationSupport {
     //     resourceBundleViewResolver.setBasename("views");
     //     return resourceBundleViewResolver;
     // }
-
+    @Override
     @Bean
     public ThemeResolver themeResolver() {
         CookieThemeResolver cookieThemeResolver = new CookieThemeResolver();
         cookieThemeResolver.setCookieName("theme");
         cookieThemeResolver.setDefaultThemeName("client-theme1");
         return cookieThemeResolver;
+    }
+
+    @Bean
+    public LocaleResolver localeResolver() {
+        CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
+        cookieLocaleResolver.setDefaultLocale(Locale.US);
+        cookieLocaleResolver.setCookieName("locale");
+        return cookieLocaleResolver;
     }
 }
