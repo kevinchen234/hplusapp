@@ -15,6 +15,8 @@ import com.test.hplus.beans.User;
 import com.test.hplus.exceptions.ApplicationException;
 import com.test.hplus.repository.UserRepository;
 
+import jakarta.servlet.http.HttpSession;
+
 /**
  *
  * @author kevinchen
@@ -27,7 +29,7 @@ public class LoginController {
     private UserRepository userRepository;
 
     @PostMapping("/login")
-    public String login(@ModelAttribute("login") Login login) {
+    public String login(@ModelAttribute("login") Login login, HttpSession session) {
         User user = userRepository.searchByName(login.getUsername());
         if (user == null) {
             throw new ApplicationException("User does not exist");
