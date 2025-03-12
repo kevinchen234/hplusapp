@@ -59,8 +59,11 @@ target/
     ```sh
     mvn install
     ```
+4. Add DB credentials to application.properties
+
 
 ## Running the Application
+Make sure that MySQL server is turned off before running the application!
 To run the application, use the following command:
 ```sh
 mvn spring-boot:run
